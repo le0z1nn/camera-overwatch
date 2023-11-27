@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Overwatch', sans-serif;
+            background-color: #0c0f15;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .fundo {
+            margin-bottom: 20px;
+            width: 370px;
+            height: 200px;
+        }
+
+        .luiz {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #camera {
+            width: 100%;
+            height: auto;
+            border: 5px solid #fff;
+            border-radius: 5px;
+        }
+
+        #foto {
+            height: 300px;
+            width: 300px;
+            background-size: cover;
+            background-position: 50%;
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        .bernardo {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+
+        .botao {
+            background-color: #ff8c00;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .botao:hover {
+            background-color: #e07b00;
+        }
+
+        #mica {
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    <title>Camera - Overwatch</title>
+</head>
+
+<body>
+   <div class="icone">
+    <img src="images.jpg" alt="">
+   </div>
+</div>
+<div class="titulo"><h1>Cartão de jogador</h1> </div>
+    <div class="luiz"> 
+       <div><h1>O melhor do mundo</h1>
+        <div id="foto"></div>
+    </div> 
+        <video id="camera" autoplay></video>
+       
+    </div>
+    <div class="bernardo">
+        <button class="botao" onclick="tirarFoto()">Tirar foto</button>
+        <button class="botao" onclick="abrirCamera()">Abrir câmera</button>
+        <button class="botao" onclick="fecharCamera()">Fechar câmera</button>
+    </div>
+    <script>
+        var mediaStream;
+
+        function abrirCamera() {
+            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+                .then(function (stream) {
+                    mediaStream = stream;
+                    const areaVideo = document.getElementById('camera');
+                    areaVideo.srcObject = stream;
+                })
+                .catch(function (error) {
+                    console.error('Erro ao acessar a camera', error)
+                })
+        };
+
+        function tirarFoto() {
+            const areaVideo = document.getElementById('camera');
+            const canvas = document.createElement('canvas');
+
+            canvas.width = areaVideo.videoWidth;
+            canvas.height = areaVideo.videoHeight;
+
+            const context = canvas.getContext('2d');
+
+            context.drawImage(areaVideo, 0, 0, canvas.width, canvas.height)
+
+            const imageDataURL = canvas.toDataURL();
+            const fotoDiv = document.getElementById('foto');
+
+            fotoDiv.style.backgroundImage = `url(${imageDataURL})`;
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = imageDataURL;
+            downloadLink.download = 'foto.png';
+            downloadLink.textContent = 'Clique para baixar';
+            downloadLink.id = "mica"
+            document.body.appendChild(downloadLink);
+        }
+
+        function fecharCamera() {
+            navigator.mediaDevices.getUserMedia({ video: false });
+
+            const areaVideo = document.getElementById('camera')
+
+            areaVideo.srcObject = null;
+            mediaStream = null;
+        }
+        
+    
+
+    </script>
+</body>
+
+</html>
